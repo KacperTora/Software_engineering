@@ -1,0 +1,233 @@
+\documentclass[12pt]{article}
+
+%polskie
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+%\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{newtxtext,newtxmath}
+
+\usepackage{subcaption}
+\usepackage{float}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{indentfirst}
+
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+% \textheight=24cm
+% \textwidth=17cm
+% \topskip=-10mm
+% \topmargin=-20mm
+% \leftmargin=-1mm
+% \oddsidemargin=-1mm      
+% \evensidemargin=-1mm
+% \renewcommand{\baselinestretch}{1}
+% %\renewcommand{\baselinestretch}{1.2}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black
+}
+
+\begin{document}
+
+\begin{titlepage}
+\noindent
+\begin{minipage}[c]{90mm}{\includegraphics[width=90mm]{pwr-logo-poziome.png}}\end{minipage} 
+\hfill 
+\begin{minipage}[c]{60mm}{\includegraphics[width=60mm]{wit-pwr-logo-podpis.png}}\end{minipage}
+
+\vspace{6ex}
+\begin{center}
+\textbf{\large Inżynieria oprogramowania: projekt}\\[10ex]
+\textsf{\Large Temat 1: Wymagania i przypadki użycia systemu informatycznego}\\[5ex]
+\textbf{\large STRUSINSKA Małgorzata, (nr indeksu)  \\[1ex]
+TORA Kacper, 284474}\\
+\end{center}
+\vspace{80mm}
+\hspace*{100mm}
+\begin{minipage}[c]{65mm}
+\small%\scriptsize 
+Prowadzący:\\
+prof. dr hab. inż. Jan Magott
+\end{minipage}
+\vfill 
+\centerline{Wrocław 2026}
+\end{titlepage}
+\setcounter{page}{2}
+\newpage
+\tableofcontents
+\newpage
+
+\section{Charakterystyka systemu i środowiska wdrożenia}
+
+\subsection{Nazwa i cel projektu}
+Projekt dotyczy oprogramowania do zarządzania kontami bankowymi zintegrowanego ze stanowiskiem samoobsługowym.. Głównym celem jest umożliwienie klientom bezpiecznej realizacji operacji gotówkowych (wypłata, wpłata) oraz informacyjnych bezpośrednio przy terminalu, z natychmiastową synchronizacją z serwerem centralnym.
+
+\subsection{Role w systemie}
+W projektowanym otoczeniu wyodrębniono dwie główne role wchodzące w interakcję z aplikacją:
+\begin{itemize}
+    \item \textbf{Klient:} Fizyczny użytkownik korzystający z terminala bankomatowego. Posiada wydaną przez bank kartę płatniczą z kodem PIN i korzysta z ekranu urządzenia w celu wykonania wpłat, wypłat, sprawdzenia stanu konta.
+    \item \textbf{Centralny System Bankowy:} Zewnętrzny system banku odpowiedzialny za autoryzację zgłoszeń, prowadzenie bazy rachunków, weryfikację poprawności PIN-u oraz księgowanie operacji finansowych.
+\end{itemize}
+
+\subsection{Wymagania formalne i założenia biznesowe}
+\begin{enumerate}
+    \item Transakcja musi zostać w całości potwierdzona i zaksięgowana albo w pełni wycofana w przypadku awarii podajnika lub braku gotówki.
+    \item Architektura systemu musi być modułowa, co pozwoli na bezproblemowe rozszerzenie terminala o dodatkowe kanały (np. wypłaty BLIK).
+\end{enumerate}
+
+\subsection{Środowisko techniczne i operacyjne}
+\begin{itemize}
+    \item Terminal bankomatowy wyposażony jest w moduł dyspensera z czterema kasetami banknotów (nominały 20, 50, 100 oraz 200 PLN) oraz moduł akceptora wpłat.
+    \item Komunikacja pomiędzy terminalem a serwerem bankowym odbywa się za pośrednictwem szyfrowanego kanału sieciowego.
+    \item Aplikacja projektowana jest z myślą o pracy ciągłej 24/7, a zakładany maksymalny czas odpowiedzi centrali na żądanie autoryzacji nie przekracza 2 sekund.
+\end{itemize}
+
+\newpage
+
+\section{Specyfikacja wymagań}
+
+\subsection{Wymagania funkcjonalne}
+\begin{itemize}
+    \item \textbf{F01:} System odczytuje dane włożonej karty i weryfikuje jej ważność oraz status blokady.
+    \item \textbf{F02:} System weryfikuje poprawność wprowadzonego przez klienta 4-cyfrowego kodu PIN.
+    \item \textbf{F03:} Karta zostaje automatycznie zablokowana po 3 kolejnych błędnych próbach podania PIN-u.
+    \item \textbf{F04:} System umożliwia wypłatę zadanej kwoty gotówki po uprzedniej autoryzacji.
+    \item \textbf{F05:} Przed wydaniem środków system sprawdza saldo konta oraz dzienny limit kwotowy klienta.
+    \item \textbf{F06:} Terminal dobiera odpowiednią kombinację dostępnych nominałów z kaset i wydaje gotówkę.
+    \item \textbf{F07:} System pozwala na wydrukowanie papierowego potwierdzenia po zakończeniu operacji.
+    \item \textbf{F08:} Klient ma możliwość podglądu aktualnego salda na ekranie (w PLN oraz w wybranej walucie obcej).
+    \item \textbf{F09:} System przyjmuje od klienta pakiet banknotów, przelicza je i zwiększa saldo konta.
+    \item \textbf{F10:} Klient ma możliwość zmiany kodu PIN do karty z poziomu menu terminala.
+\end{itemize}
+
+\subsection{Wymagania niefunkcjonalne}
+\begin{itemize}
+    \item \textbf{NF01 (Wydajność):} Średni czas obsługi pojedynczego zapytania autoryzacyjnego wynosi poniżej 2 sekund.
+    \item \textbf{NF02 (Bezpieczeństwo):} Dane wrażliwe (kod PIN) są natychmiast szyfrowane i nie są zapisywane w logach aplikacji w postaci jawnej.
+    \item \textbf{NF03 (Niezawodność):} Bankomat blokuje możliwość wypłaty, jeśli w kasetach brakuje banknotów do wydania żądanej kwoty.
+    \item \textbf{NF04 (Architektura):} Kod tworzony jest zgodnie ze wzorcem MVP (Model-View-Presenter), rozdzielając logikę biznesową od interfejsu.
+    \item \textbf{NF05 (Technologia):} Implementacja prowadzona jest w obiektowym języku Java.
+    \item \textbf{NF06 (Użyteczność):} Ekran terminala wyświetla komunikaty krok po kroku, a interfejs przystosowany jest do obsługi klawiaturą funkcyjną i ekranem dotykowym.
+\end{itemize}
+
+\section{Diagram przypadków użycia}
+
+Poniższy diagram modeluje funkcjonalności udostępniane przez terminal bankomatowy.
+
+\begin{figure}[H]
+    \centering
+    % Plik wyeksportowany z Visual Paradigm:
+    \includegraphics[width=1\textwidth]{Diagram_przypadkow_uzycia.jpg}
+    \caption{Diagram przypadków użycia terminala bankomatowego}
+\end{figure}
+
+\newpage
+
+\section{Opis scenariuszy przypadków użycia}
+
+\subsection*{PU01. Autoryzacja PIN}
+\textbf{Cel:} Identyfikacja klienta i autoryzacja dostępu do konta na podstawie karty i PIN-u.\\
+\textbf{Warunki początkowe:} Terminal jest w stanie gotowości; klient włożył kartę do czytnika.\\
+\textbf{Warunki końcowe:} Klient uzyskuje dostęp do menu głównego lub karta zostaje zablokowana. Spełniono wymagania: \textbf{F01, F02, F03}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Terminal odczytuje numer karty i prosi o wprowadzenie 4 cyfr kodu PIN.
+    \item Klient wpisuje kod PIN na klawiaturze numerycznej i zatwierdza zielonym przyciskiem.
+    \item Terminal przesyła zaszyfrowane zapytanie do systemu.
+    \item System bankowy potwierdza zgodność PIN-u i poprawny status karty.
+    \item Terminal zeruje licznik nieudanych prób logowania i przechodzi do menu wyboru operacji.
+\end{enumerate}
+
+\subsection*{PU02. Wypłata gotówki}
+\textbf{Cel:} Pobranie zadanej kwoty w gotówce z powiązanego rachunku bankowego.\\
+\textbf{Warunki początkowe:} Klient pomyślnie przeszedł autoryzację (\textbf{PU01}); w kasetach znajdują się banknoty.\\
+\textbf{Warunki końcowe:} Pieniądze zostały wydane klientowi, a saldo na koncie zostało pomniejszone. Spełniono wymagania: \textbf{F04, F05, F06}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Klient wybiera opcję wypłaty i wskazuje kwotę na ekranie.
+    \item Terminal weryfikuje w systemie bankowym dostępne środki oraz dzienny limit wypłat.
+    \item Algorytm dyspensera wyznacza zestaw nominałów potrzebny do wypłacenia podanej sumy.
+    \item System bankowy rezerwuje środki i obciąża rachunek klienta.
+    \item Dyspenser wysuwa banknoty w kieszeni wydawczej.
+    \item Klient odbiera gotówkę.
+    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
+\end{enumerate}
+
+\subsection*{PU03. Sprawdzenie salda}
+\textbf{Cel:} Odczyt i wyświetlenie aktualnych środków na rachunku klienta.\\
+\textbf{Warunki początkowe:} Klient jest zalogowany po udanej autoryzacji (\textbf{PU01}).\\
+\textbf{Warunki końcowe:} Informacja o saldzie pojawia się na wyświetlaczu. Spełniono wymaganie: \textbf{F08}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Klient wybiera z menu funkcję „Sprawdź saldo”.
+    \item Terminal wysyła zapytanie o stan konta do systemu bankowego.
+    \item System bankowy zwraca wartość salda dostępnego oraz ewentualnych blokad.
+    \item Terminal prezentuje dane na ekranie.
+    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
+\end{enumerate}
+
+\subsection*{PU04. Wydruk potwierdzenia}
+\textbf{Cel:} Wydrukowanie papierowego kwitu z podsumowaniem wykonanej operacji.\\
+\textbf{Warunki początkowe:} Klient zrealizował operację bazową (\textbf{PU02, PU03} lub \textbf{PU06}); w drukarce znajduje się papier.\\
+\textbf{Warunki końcowe:} Potwierdzenie zostaje wydrukowane i wysunięte z drukarki. Spełniono wymaganie: \textbf{F07}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Po zatwierdzeniu operacji system wyświetla pytanie o chęć odebrania wydruku.
+    \item Klient wybiera opcję „Drukuj potwierdzenie”.
+    \item Drukarka generuje kwit z datą, godziną, zamaskowanym numerem karty oraz statusem operacji.
+    \item Klient odbiera wydruk.
+\end{enumerate}
+
+\subsection*{PU05. Zmiana kodu PIN}
+\textbf{Cel:} Nadanie nowego 4-cyfrowego kodu zabezpieczającego dla aktualnej karty.\\
+\textbf{Warunki początkowe:} Klient jest zalogowany (\textbf{PU01}).\\
+\textbf{Warunki końcowe:} Nowy PIN zostaje zapisany w bazie banku. Spełniono wymaganie: \textbf{F10}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Klient wybiera z menu opcję zmiany kodu PIN.
+    \item Terminal wyświetla prośbę o wpisanie nowego 4-cyfrowego kodu.
+    \item Klient wprowadza nowy kod.
+    \item Terminal prosi o powtórzenie kodu w celu eliminacji pomyłek.
+    \item Klient wpisuje kod ponownie.
+    \item Terminal sprawdza zgodność obu ciągów cyfr oraz odrzuca zbyt proste kombinacje (np. cztery jednakowe cyfry).
+    \item Nowy kod zostaje przesłany do systemu bankowego, a na ekranie pojawia się komunikat o sukcesie.
+\end{enumerate}
+
+\subsection*{PU06. Wpłata gotówki}
+\textbf{Cel:} Przyjęcie banknotów przez terminal i powiększenie salda rachunku klienta.\\
+\textbf{Warunki początkowe:} Klient jest uwierzytelniony (\textbf{PU01}); wpłatomat jest sprawny technicznie.\\
+\textbf{Warunki końcowe:} Gotówka zostaje zdeponowana w kasecie, a konto klienta zasilone. Spełniono wymaganie: \textbf{F09}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Klient wybiera opcję wpłaty gotówki.
+    \item Otwiera się kieszeń depozytowa urządzenia.
+    \item Klient wkłada przygotowane banknoty.
+    \item Moduł wpłatomatu pobiera plik, sprawdza autentyczność i rozpoznaje nominały.
+    \item Terminal prezentuje zestawienie przyjętych banknotów i łączną kwotę wpłaty.
+    \item Klient klika „Zatwierdź wpłatę”.
+    \item Terminal wysyła polecenie księgowania do systemu bankowego, a środki trafiają na konto.
+    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
+\end{enumerate}
+
+\subsection*{PU07. Sprawdzenie salda w walucie obcej}
+\textbf{Cel:} Prezentacja środków na koncie w przeliczeniu na wybraną walutę (dziedziczy zachowanie po PU03).\\
+\textbf{Warunki początkowe:} Klient jest uwierzytelniony (\textbf{PU01}); system bankowy udostępnia aktualną tabelę kursów.\\
+\textbf{Warunki końcowe:} Na ekranie wyświetla się saldo w PLN oraz jego przeliczona wartość. Spełniono wymaganie: \textbf{F08}.\\
+\textbf{Przebieg główny:}
+\begin{enumerate}
+    \item Klient wybiera opcję podglądu salda w innej walucie.
+    \item Terminal wyświetla listę dostępnych walut (EUR, USD, GBP, CHF).
+    \item Klient wskazuje wybraną walutę z listy.
+    \item System pobiera saldo konta w PLN oraz aktualny kurs średni z systemu bankowego.
+    \item Terminal dokonuje kalkulacji i wyświetla równowartość kwoty w wybranej walucie.
+    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
+\end{enumerate}
+
+\end{document}
