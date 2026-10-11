@@ -1,233 +1,620 @@
-\documentclass[12pt]{article}
+\documentclass[10pt,a4paper]{article}
 
-%polskie
+% Kodowanie i język
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
-\usepackage{amsmath}
-%\usepackage{graphics}
-\usepackage{graphicx}
-\usepackage{newtxtext,newtxmath}
 
-\usepackage{subcaption}
+% Układ stron i grafika
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{ragged2e}
+\usepackage{caption}
 \usepackage{float}
-
-\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{xurl}
 \usepackage{indentfirst}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tocloft}
+\usepackage{needspace}
+\usepackage[colorlinks=true,allcolors=black]{hyperref}
 
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{titlesec}
+% ---------------- SPIS TREŚCI ----------------
+% Numeracja rozdziałów i podrozdziałów: 1, 1.1, 1.2 itd.
+% W spisie treści widoczne są tylko sekcje i podsekcje.
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsecpagefont}{\bfseries}
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsubsecpagefont}{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftsecnumwidth}{1.8em}
+\setlength{\cftsubsecindent}{1.8em}
+\setlength{\cftsubsecnumwidth}{2.8em}
+\setlength{\cftbeforesecskip}{6pt}
 
-% \textheight=24cm
-% \textwidth=17cm
-% \topskip=-10mm
-% \topmargin=-20mm
-% \leftmargin=-1mm
-% \oddsidemargin=-1mm      
-% \evensidemargin=-1mm
-% \renewcommand{\baselinestretch}{1}
-% %\renewcommand{\baselinestretch}{1.2}
+% ---------------- KOD ŹRÓDŁOWY (do późniejszych części) ----------------
+\lstset{
+    backgroundcolor=\color{gray!5},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b,
+    commentstyle=\color{green!50!black},
+    frame=single,
+    keywordstyle=\color{blue},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    tabsize=4,
+    showstringspaces=false,
+    extendedchars=true,
+    literate={ą}{{\k{a}}}1 {ć}{{\'c}}1 {ę}{{\k{e}}}1 {ł}{{\l{}}}1 {ń}{{\'n}}1 {ó}{{\'o}}1 {ś}{{\'s}}1 {ź}{{\'z}}1 {ż}{{\.z}}1
+             {Ą}{{\k{A}}}1 {Ć}{{\'C}}1 {Ę}{{\k{E}}}1 {Ł}{{\L{}}}1 {Ń}{{\'N}}1 {Ó}{{\'O}}1 {Ś}{{\'S}}1 {Ź}{{\'Z}}1 {Ż}{{\.Z}}1
+}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=black
+% Ramka na każdej stronie
+\AddToShipoutPicture{%
+  \AtPageLowerLeft{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \draw[line width=0.5pt,color=black]
+        (0.5cm,0.5cm) rectangle (\paperwidth - 0.5cm,\paperheight - 0.5cm);
+    \end{tikzpicture}%
+  }%
 }
 
 \begin{document}
 
+% ---------------- STRONA TYTUŁOWA ----------------
 \begin{titlepage}
-\noindent
-\begin{minipage}[c]{90mm}{\includegraphics[width=90mm]{pwr-logo-poziome.png}}\end{minipage} 
-\hfill 
-\begin{minipage}[c]{60mm}{\includegraphics[width=60mm]{wit-pwr-logo-podpis.png}}\end{minipage}
+\newcommand{\HRule}{\rule{\linewidth}{1mm}}
+\centering
 
-\vspace{6ex}
-\begin{center}
-\textbf{\large Inżynieria oprogramowania: projekt}\\[10ex]
-\textsf{\Large Temat 1: Wymagania i przypadki użycia systemu informatycznego}\\[5ex]
-\textbf{\large STRUSINSKA Małgorzata, (nr indeksu)  \\[1ex]
-TORA Kacper, 284474}\\
-\end{center}
-\vspace{80mm}
-\hspace*{100mm}
-\begin{minipage}[c]{65mm}
-\small%\scriptsize 
-Prowadzący:\\
-prof. dr hab. inż. Jan Magott
+\noindent
+\begin{minipage}[c]{0.45\textwidth}
+    \begin{flushleft}
+        % Jeśli logo nie jest wgrane, wyświetlany jest tekst zastępczy.
+        \IfFileExists{pwr-logo-poziome.png}{%
+            \includegraphics[scale=0.6]{pwr-logo-poziome.png}%
+        }{\fbox{Logo Politechniki Wrocławskiej}}%
+    \end{flushleft}
 \end{minipage}
-\vfill 
-\centerline{Wrocław 2026}
+\hfill
+\begin{minipage}[c]{0.45\textwidth}
+    \begin{flushright}
+        \IfFileExists{wit-pwr-logo-podpis.png}{%
+            \includegraphics[width=\linewidth]{wit-pwr-logo-podpis.png}%
+        }{\fbox{Logo WIT PWr}}%
+    \end{flushright}
+\end{minipage}
+
+\vspace{2cm}
+\textsc{\Large Inżynieria oprogramowania}\\[0.5cm]
+\textsc{\large LABORATORIA PONIEDZIAŁEK 9:15}\\[0.5cm]
+\textsc{\large GRUPA 12}\\[0.5cm]
+
+\HRule \\[0.4cm]
+{\huge\bfseries BANKOMAT\par}
+\vspace{0.5cm}
+\HRule \\[0.8cm]
+
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \Large\emph{Autorzy:}\\
+    Małgorzata \textsc{Strusińska} 284549 \\
+    Kacper \textsc{Tora} 284474
+\end{minipage}
+
+\vspace{5cm}
+\begin{flushright}
+    \large\emph{Prowadzący:}\\
+    Prof. dr hab. inż. Jan \textsc{Magott}
+\end{flushright}
+\vspace{1cm}
+Wrocław, 2026
+\vfill
 \end{titlepage}
-\setcounter{page}{2}
-\newpage
+
+% Od tego miejsca jednakowe marginesy 2 cm.
+\newgeometry{bottom=2cm,top=2cm,left=2cm,right=2cm}
+\renewcommand{\figurename}{Rys.}
+\renewcommand{\lstlistingname}{Kod źródłowy}
+
+% ---------------- SPIS TREŚCI ----------------
+% Klasyczny czarno-biały tytuł, bez zielonego tła.
+\renewcommand{\contentsname}{\makebox[\textwidth][c]{Spis treści}}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries}
+\renewcommand{\cftaftertoctitle}{}
 \tableofcontents
 \newpage
 
-\section{Charakterystyka systemu i środowiska wdrożenia}
+\justifying
+\frenchspacing
 
-\subsection{Nazwa i cel projektu}
-Projekt dotyczy oprogramowania do zarządzania kontami bankowymi zintegrowanego ze stanowiskiem samoobsługowym.. Głównym celem jest umożliwienie klientom bezpiecznej realizacji operacji gotówkowych (wypłata, wpłata) oraz informacyjnych bezpośrednio przy terminalu, z natychmiastową synchronizacją z serwerem centralnym.
 
-\subsection{Role w systemie}
-W projektowanym otoczeniu wyodrębniono dwie główne role wchodzące w interakcję z aplikacją:
-\begin{itemize}
-    \item \textbf{Klient:} Fizyczny użytkownik korzystający z terminala bankomatowego. Posiada wydaną przez bank kartę płatniczą z kodem PIN i korzysta z ekranu urządzenia w celu wykonania wpłat, wypłat, sprawdzenia stanu konta.
-    \item \textbf{Centralny System Bankowy:} Zewnętrzny system banku odpowiedzialny za autoryzację zgłoszeń, prowadzenie bazy rachunków, weryfikację poprawności PIN-u oraz księgowanie operacji finansowych.
-\end{itemize}
+% Zwarte listy i punktacja scenariuszy: 1., 1.1., 1.1.1.
+\newlist{scenariusz}{enumerate}{3}
+\setlist[scenariusz,1]{label=\arabic*.,leftmargin=*,topsep=3pt,itemsep=2pt,parsep=0pt}
+\setlist[scenariusz,2]{label=\arabic{scenariuszi}.\arabic*.,leftmargin=2.6em,topsep=1pt,itemsep=1pt,parsep=0pt}
+\setlist[scenariusz,3]{label=\arabic{scenariuszi}.\arabic{scenariuszii}.\arabic*.,leftmargin=3.2em,topsep=1pt,itemsep=1pt,parsep=0pt}
+\setlist[itemize]{label=-,topsep=2pt,itemsep=1pt,parsep=0pt,leftmargin=*}
+\setlist[enumerate]{topsep=2pt,itemsep=1pt,parsep=0pt}
 
-\subsection{Wymagania formalne i założenia biznesowe}
+
+
+
+% ---------------- MODELOWANIE WYMAGAŃ ----------------
+\section{Modelowanie wymagań i przypadków użycia}
+
+\subsection{Miejsce wdrożenia}
+
+\noindent\textbf{Nazwa projektu:}
+
+System Obsługi Bankomatu, zwany dalej systemem.
+
+\medskip
+\noindent\textbf{Klient:}
+
+Operator sieci bankomatów obsługujący klientów różnych banków, zwany dalej operatorem.
+
+\medskip
+\noindent\textbf{Cel projektu:}
+
+Stworzenie systemu do obsługi bankomatu z funkcją wpłatomatu oraz przewalutowania wypłaty. Klient może wypłacać i wpłacać gotówkę, sprawdzać saldo i drukować potwierdzenia.
+
+\medskip
+\noindent\textbf{Zasoby ludzkie:}
+
+Użytkownikami systemu są:
 \begin{enumerate}
-    \item Transakcja musi zostać w całości potwierdzona i zaksięgowana albo w pełni wycofana w przypadku awarii podajnika lub braku gotówki.
-    \item Architektura systemu musi być modułowa, co pozwoli na bezproblemowe rozszerzenie terminala o dodatkowe kanały (np. wypłaty BLIK).
+    \item Klient banku - każda osoba posiadająca rachunek bankowy i kartę płatniczą obsługiwaną przez bankomat. Po podaniu poprawnego PIN-u może korzystać z dostępnych funkcji urządzenia.
+    \item Pracownik obsługi bankomatu - sprawdza stan urządzenia, uzupełnia gotówkę do wypłat i odbiera wpłacone banknoty.
+    \item System bankowy
 \end{enumerate}
 
-\subsection{Środowisko techniczne i operacyjne}
-\begin{itemize}
-    \item Terminal bankomatowy wyposażony jest w moduł dyspensera z czterema kasetami banknotów (nominały 20, 50, 100 oraz 200 PLN) oraz moduł akceptora wpłat.
-    \item Komunikacja pomiędzy terminalem a serwerem bankowym odbywa się za pośrednictwem szyfrowanego kanału sieciowego.
-    \item Aplikacja projektowana jest z myślą o pracy ciągłej 24/7, a zakładany maksymalny czas odpowiedzi centrali na żądanie autoryzacji nie przekracza 2 sekund.
-\end{itemize}
+\medskip
+\noindent\textbf{Przepisy i strategie:}
 
+\begin{enumerate}
+    \item Operacje bankowe są wykonywane zgodnie z zasadami i regulaminami banków.
+    \item Użytkowników systemu obowiązuje przestrzeganie art. 13 ust. 1 i ust. 2 Rozporządzenia Parlamentu Europejskiego
+    i Rady (UE) 2016/679 z 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych
+    osobowych (tzw. RODO).
+    \item Osobą zarządzającą i administratorem danych osobowych klientów jest bank, w którym klient utworzył konto.
+    \item Bankomat jest urządzeniem samoobsługowym, po podaniu PIN-u automatyzuje część wykonanych przez klienta zdarzeń.
+    \item Po trzech błędnych próbach bankomat blokuje dalsze próby uwierzytelnienia i zgłasza zainstniałą sytuację odpowiedniemu podmiotowi.
+    \item Aby wypłata doszła do skutku, wymaga to posiadania wystarczającej liczby środków na koncie, nieprzekroczenia ustalonego limitu oraz dostępnej odpowiadającej liczby nominowałów.
+    \item Przy wpłacie bankomat liczy i sprawdza banknoty. Klient zatwierdza kwotę wykrytą przez urządzenie.
+    \item Podczas wypłaty gotówki w innej walucie, klient zobowiązany jest zatwierdzić kwotę.
+    \item Klient może anulować operację przed jej zatwierdzeniem. Po zakończeniu sesji bankomat wraca do ekranu ze stanem początkowym.
+    \item Bankomat rejestruje wszelkie zdarzenia, które miały miejsce, a ich kopie przesyła do odpowiednich podmiotów, z którymi klient jest związany.
+    \item Maksymalna kwota jednorazowej wypłaty, którą umożliwia bankomat wynosi 2000 zł.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Dane techniczne:}
+
+\begin{enumerate}
+    \item Bankomat posiada ekran, klawiaturę, czytnik kart, moduły wpłat i wypłat oraz drukarkę potwierdzeń w formie paragonu.
+    \item Do wypłat bankomat przyjmuje nominały 10, 20, 50, 100 i 200 zł. Banknoty z wpłat są przechowywane osobno.
+    \item Z bankomatu może korzystać jednocześnie tylko jeden klient.
+    \item Bankomat łączy się z zewnętrznym systemem bankowym, który sprawdza PIN, saldo i zatwierdza transakcje.
+    \item System jest przeznaczony do pracy 24 godziny na dobę, z przerwami na awarie i prace serwisowe (np. uzupełnienie gotówki) - w przypadku nieprzewidzianych usterek, wyswietla komunikat o wykrytym problemie na ekranie.
+    
+\end{enumerate}
 \newpage
+\subsection{Wymagania}
 
-\section{Specyfikacja wymagań}
+\noindent\textbf{Wymagania funkcjonalne:}\par
+\smallskip
+\noindent
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+F01) & Bankomat przechowuje i przetwarza dane o kliencie danego banku i wykorzystuje je jedynie do weryfikowania żądań. \\[4pt]
+F02) & Klient loguje się za pomocą karty płatniczej i numeru PIN. \\[4pt]
+F03) & Klient wypłaca gotówkę z konta. \\[4pt]
+F04) & Klient sprawdza saldo konta, również w przeliczeniu na wybraną walutę. \\[4pt]
+F05) & Na życzenie klienta bankomat drukuje potwierdzenie wykonanej operacji. \\[4pt]
+F06) & Klient otrzymuje możliwość anulowania operacji przed jej zatwierdzeniem. \\[4pt]
+F07) & Klient kończy sesję i odbiera kartę. \\[4pt]
+F08) & Pracownik sprawdza stan bankomatu i ilość gotówki. \\[4pt]
+F09) & Pracownik uzupełnia gotówkę do wypłat lub odbiera banknoty z wpłat. \\[4pt]
+F10) & Klient wpłaca gotówkę na konto. \\[4pt]
+F11) & Podczas wypłaty klient może dokonać przewalutowania transakcji.
+\end{tabularx}
 
-\subsection{Wymagania funkcjonalne}
-\begin{itemize}
-    \item \textbf{F01:} System odczytuje dane włożonej karty i weryfikuje jej ważność oraz status blokady.
-    \item \textbf{F02:} System weryfikuje poprawność wprowadzonego przez klienta 4-cyfrowego kodu PIN.
-    \item \textbf{F03:} Karta zostaje automatycznie zablokowana po 3 kolejnych błędnych próbach podania PIN-u.
-    \item \textbf{F04:} System umożliwia wypłatę zadanej kwoty gotówki po uprzedniej autoryzacji.
-    \item \textbf{F05:} Przed wydaniem środków system sprawdza saldo konta oraz dzienny limit kwotowy klienta.
-    \item \textbf{F06:} Terminal dobiera odpowiednią kombinację dostępnych nominałów z kaset i wydaje gotówkę.
-    \item \textbf{F07:} System pozwala na wydrukowanie papierowego potwierdzenia po zakończeniu operacji.
-    \item \textbf{F08:} Klient ma możliwość podglądu aktualnego salda na ekranie (w PLN oraz w wybranej walucie obcej).
-    \item \textbf{F09:} System przyjmuje od klienta pakiet banknotów, przelicza je i zwiększa saldo konta.
-    \item \textbf{F10:} Klient ma możliwość zmiany kodu PIN do karty z poziomu menu terminala.
-\end{itemize}
-
-\subsection{Wymagania niefunkcjonalne}
-\begin{itemize}
-    \item \textbf{NF01 (Wydajność):} Średni czas obsługi pojedynczego zapytania autoryzacyjnego wynosi poniżej 2 sekund.
-    \item \textbf{NF02 (Bezpieczeństwo):} Dane wrażliwe (kod PIN) są natychmiast szyfrowane i nie są zapisywane w logach aplikacji w postaci jawnej.
-    \item \textbf{NF03 (Niezawodność):} Bankomat blokuje możliwość wypłaty, jeśli w kasetach brakuje banknotów do wydania żądanej kwoty.
-    \item \textbf{NF04 (Architektura):} Kod tworzony jest zgodnie ze wzorcem MVP (Model-View-Presenter), rozdzielając logikę biznesową od interfejsu.
-    \item \textbf{NF05 (Technologia):} Implementacja prowadzona jest w obiektowym języku Java.
-    \item \textbf{NF06 (Użyteczność):} Ekran terminala wyświetla komunikaty krok po kroku, a interfejs przystosowany jest do obsługi klawiaturą funkcyjną i ekranem dotykowym.
-\end{itemize}
-
-\section{Diagram przypadków użycia}
+\medskip
+\Needspace{9\baselineskip}
+\noindent\textbf{Wymagania niefunkcjonalne:}\par
+\smallskip
+\noindent
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+N01) & Bankomat obsługuje karty różnych banków, zgodne z zawartymi umowami, jego działania po dokonanym przez użytkownika wyborze są automatyzowane przez system. \\[4pt]
+N02) & Połączenie z systemem bankowym jest szyfrowane, a PIN nie jest zapisywany w jawnej postaci. \\[4pt]
+N03) & System zapisuje informacje o wykonanych transakcjach i błędach. \\[4pt]
+N04) & Jednocześnie z bankomatu korzysta tylko jeden klient. \\[4pt]
+N05) & Dostęp do funkcji obsługi urządzenia mają tylko upoważnieni pracownicy. \\[4pt]
+N06) & System jest przeznaczony do pracy 24 godziny na dobę, z przerwami na awarie i prace serwisowe (np. uzupełnienie gotówki). \\
+N07) & W razie awarii lub utraty połączenia bankomat wstrzymuje operacje, których nie może bezpiecznie wykonać. \\[4pt]
+N08) & Tylko pracownik obsługi bankomatu jest upoważniony do przeprowadzania prac serwisowych. \\
+N09) & Danymi osobowymi klienta zarządza bank, w którym posiada otwarty rachunek. \\
+N10) & System wyświetla czytelne komunikaty na kolejnych etapach operacji.
+\end{tabularx}
+\newpage
+\subsection{Diagram przypadków użycia}
 
 Poniższy diagram modeluje funkcjonalności udostępniane przez terminal bankomatowy.
 
 \begin{figure}[H]
     \centering
-    % Plik wyeksportowany z Visual Paradigm:
-    \includegraphics[width=1\textwidth]{Diagram_przypadkow_uzycia.jpg}
+    \includegraphics[width=1\textwidth]{diagram.png}
     \caption{Diagram przypadków użycia terminala bankomatowego}
 \end{figure}
 
-\newpage
 
-\section{Opis scenariuszy przypadków użycia}
+\subsection{Słowny opis przypadków użycia}
 
-\subsection*{PU01. Autoryzacja PIN}
-\textbf{Cel:} Identyfikacja klienta i autoryzacja dostępu do konta na podstawie karty i PIN-u.\\
-\textbf{Warunki początkowe:} Terminal jest w stanie gotowości; klient włożył kartę do czytnika.\\
-\textbf{Warunki końcowe:} Klient uzyskuje dostęp do menu głównego lub karta zostaje zablokowana. Spełniono wymagania: \textbf{F01, F02, F03}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Terminal odczytuje numer karty i prosi o wprowadzenie 4 cyfr kodu PIN.
-    \item Klient wpisuje kod PIN na klawiaturze numerycznej i zatwierdza zielonym przyciskiem.
-    \item Terminal przesyła zaszyfrowane zapytanie do systemu.
-    \item System bankowy potwierdza zgodność PIN-u i poprawny status karty.
-    \item Terminal zeruje licznik nieudanych prób logowania i przechodzi do menu wyboru operacji.
-\end{enumerate}
+\Needspace{9\baselineskip}
+\subsubsection*{PU01. Uwierzytelnienie klienta}
 
-\subsection*{PU02. Wypłata gotówki}
-\textbf{Cel:} Pobranie zadanej kwoty w gotówce z powiązanego rachunku bankowego.\\
-\textbf{Warunki początkowe:} Klient pomyślnie przeszedł autoryzację (\textbf{PU01}); w kasetach znajdują się banknoty.\\
-\textbf{Warunki końcowe:} Pieniądze zostały wydane klientowi, a saldo na koncie zostało pomniejszone. Spełniono wymagania: \textbf{F04, F05, F06}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Klient wybiera opcję wypłaty i wskazuje kwotę na ekranie.
-    \item Terminal weryfikuje w systemie bankowym dostępne środki oraz dzienny limit wypłat.
-    \item Algorytm dyspensera wyznacza zestaw nominałów potrzebny do wypłacenia podanej sumy.
-    \item System bankowy rezerwuje środki i obciąża rachunek klienta.
-    \item Dyspenser wysuwa banknoty w kieszeni wydawczej.
-    \item Klient odbiera gotówkę.
-    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
-\end{enumerate}
+\noindent\textbf{Cel:} Umożliwienie klientowi dostępu do operacji bankowych.
 
-\subsection*{PU03. Sprawdzenie salda}
-\textbf{Cel:} Odczyt i wyświetlenie aktualnych środków na rachunku klienta.\\
-\textbf{Warunki początkowe:} Klient jest zalogowany po udanej autoryzacji (\textbf{PU01}).\\
-\textbf{Warunki końcowe:} Informacja o saldzie pojawia się na wyświetlaczu. Spełniono wymaganie: \textbf{F08}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Klient wybiera z menu funkcję „Sprawdź saldo”.
-    \item Terminal wysyła zapytanie o stan konta do systemu bankowego.
-    \item System bankowy zwraca wartość salda dostępnego oraz ewentualnych blokad.
-    \item Terminal prezentuje dane na ekranie.
-    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
-\end{enumerate}
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Klienta:
+    \begin{itemize}
+        \item Klient posiada kartę płatniczą i zna numer PIN.
+    \end{itemize}
+    \item Bankomat jest sprawny i ma połączenie z systemem bankowym.
+\end{itemize}
 
-\subsection*{PU04. Wydruk potwierdzenia}
-\textbf{Cel:} Wydrukowanie papierowego kwitu z podsumowaniem wykonanej operacji.\\
-\textbf{Warunki początkowe:} Klient zrealizował operację bazową (\textbf{PU02, PU03} lub \textbf{PU06}); w drukarce znajduje się papier.\\
-\textbf{Warunki końcowe:} Potwierdzenie zostaje wydrukowane i wysunięte z drukarki. Spełniono wymaganie: \textbf{F07}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Po zatwierdzeniu operacji system wyświetla pytanie o chęć odebrania wydruku.
-    \item Klient wybiera opcję „Drukuj potwierdzenie”.
-    \item Drukarka generuje kwit z datą, godziną, zamaskowanym numerem karty oraz statusem operacji.
-    \item Klient odbiera wydruk.
-\end{enumerate}
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Klient został uwierzytelniony lub otrzymał informację o błędzie.
+    \item Spełniono wymaganie F01: Bankomat przechowuje i przetwarza dane o kliencie
+    \item Spełniono wymaganie F02: Klient loguje się za pomocą karty płatniczej i numeru PIN.
+\end{itemize}
 
-\subsection*{PU05. Zmiana kodu PIN}
-\textbf{Cel:} Nadanie nowego 4-cyfrowego kodu zabezpieczającego dla aktualnej karty.\\
-\textbf{Warunki początkowe:} Klient jest zalogowany (\textbf{PU01}).\\
-\textbf{Warunki końcowe:} Nowy PIN zostaje zapisany w bazie banku. Spełniono wymaganie: \textbf{F10}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Klient wybiera z menu opcję zmiany kodu PIN.
-    \item Terminal wyświetla prośbę o wpisanie nowego 4-cyfrowego kodu.
-    \item Klient wprowadza nowy kod.
-    \item Terminal prosi o powtórzenie kodu w celu eliminacji pomyłek.
-    \item Klient wpisuje kod ponownie.
-    \item Terminal sprawdza zgodność obu ciągów cyfr oraz odrzuca zbyt proste kombinacje (np. cztery jednakowe cyfry).
-    \item Nowy kod zostaje przesłany do systemu bankowego, a na ekranie pojawia się komunikat o sukcesie.
-\end{enumerate}
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Klient wkłada kartę do czytnika.
+    \item Bankomat prosi o PIN, a klient go wprowadza.
+    \item System bankowy sprawdza dane karty i numer PIN.
+    \item Jeśli dane są poprawne:
+    \begin{scenariusz}
+        \item Bankomat wyświetla menu dostępnych operacji.
+    \end{scenariusz}
+    \item W przeciwnym razie:
+    \begin{scenariusz}
+        \item Bankomat informuje o błędnych danych.
+        \item Klient może ponownie wprowadzić PIN, jeśli nie przekroczył trzech prób.
+        \item Po trzech nieudanych próbach bankomat blokuje dalsze próby uwierzytelnienia i zgłasza zdarzenie do systemu bankowego.
+    \end{scenariusz}
+\end{scenariusz}
 
-\subsection*{PU06. Wpłata gotówki}
-\textbf{Cel:} Przyjęcie banknotów przez terminal i powiększenie salda rachunku klienta.\\
-\textbf{Warunki początkowe:} Klient jest uwierzytelniony (\textbf{PU01}); wpłatomat jest sprawny technicznie.\\
-\textbf{Warunki końcowe:} Gotówka zostaje zdeponowana w kasecie, a konto klienta zasilone. Spełniono wymaganie: \textbf{F09}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Klient wybiera opcję wpłaty gotówki.
-    \item Otwiera się kieszeń depozytowa urządzenia.
-    \item Klient wkłada przygotowane banknoty.
-    \item Moduł wpłatomatu pobiera plik, sprawdza autentyczność i rozpoznaje nominały.
-    \item Terminal prezentuje zestawienie przyjętych banknotów i łączną kwotę wpłaty.
-    \item Klient klika „Zatwierdź wpłatę”.
-    \item Terminal wysyła polecenie księgowania do systemu bankowego, a środki trafiają na konto.
-    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
-\end{enumerate}
 
-\subsection*{PU07. Sprawdzenie salda w walucie obcej}
-\textbf{Cel:} Prezentacja środków na koncie w przeliczeniu na wybraną walutę (dziedziczy zachowanie po PU03).\\
-\textbf{Warunki początkowe:} Klient jest uwierzytelniony (\textbf{PU01}); system bankowy udostępnia aktualną tabelę kursów.\\
-\textbf{Warunki końcowe:} Na ekranie wyświetla się saldo w PLN oraz jego przeliczona wartość. Spełniono wymaganie: \textbf{F08}.\\
-\textbf{Przebieg główny:}
-\begin{enumerate}
-    \item Klient wybiera opcję podglądu salda w innej walucie.
-    \item Terminal wyświetla listę dostępnych walut (EUR, USD, GBP, CHF).
-    \item Klient wskazuje wybraną walutę z listy.
-    \item System pobiera saldo konta w PLN oraz aktualny kurs średni z systemu bankowego.
-    \item Terminal dokonuje kalkulacji i wyświetla równowartość kwoty w wybranej walucie.
-    \item Opcjonalnie: następuje rozszerzenie o \textbf{PU04. Wydruk potwierdzenia}.
-\end{enumerate}
+\Needspace{9\baselineskip}
+\subsubsection*{PU02. Wypłata gotówki}
+
+\noindent\textbf{Cel:} Wypłacenie klientowi wybranej kwoty.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Klienta:
+    \begin{itemize}
+        \item Klient został uwierzytelniony przez PU01. Uwierzytelnienie klienta.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Gotówka została wypłacona lub klient otrzymał informację o odmowie albo błędzie.
+    \item Spełniono wymaganie F03: Klient wypłaca gotówkę z konta.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Klient wybiera wypłatę i podaje kwotę.
+    \item Bankomat sprawdza, czy kwota nie przekracza 2000 zł oraz czy posiada odpowiednie banknoty.
+    \item Jeśli kwota jest dozwolona i dostępne są odpowiednie banknoty:
+    \begin{scenariusz}
+        \item Jeśli karta jest rozliczana w innej walucie, następuje inicjacja PU10. Przewalutowanie podczas wypłaty.
+        \item Bankomat wyświetla szczegóły wypłaty.
+        \item Jeśli klient wybierze anulowanie:
+        \begin{scenariusz}
+            \item Inicjacja PU05. Anulowanie operacji.
+        \end{scenariusz}
+        \item W przeciwnym razie:
+        \begin{scenariusz}
+            \item Klient zatwierdza wypłatę.
+            \item Bankomat wysyła zapytanie do systemu bankowego.
+            \item Jeśli bank zatwierdzi wypłatę:
+            \begin{scenariusz}
+                \item Bankomat wydaje gotówkę i zapisuje transakcję.
+                \item Jeśli klient wybierze wydruk, następuje inicjacja PU04. Drukowanie potwierdzenia.
+            \end{scenariusz}
+            \item W przeciwnym razie:
+            \begin{scenariusz}
+                \item Bankomat informuje o odmowie wypłaty.
+            \end{scenariusz}
+        \end{scenariusz}
+    \end{scenariusz}
+    \item W przeciwnym razie:
+    \begin{scenariusz}
+        \item Bankomat informuje o niemożności wypłaty wybranej kwoty.
+    \end{scenariusz}
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU03. Sprawdzenie salda}
+
+\noindent\textbf{Cel:} Wyświetlenie salda konta klienta.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Klienta:
+    \begin{itemize}
+        \item Klient został uwierzytelniony przez PU01. Uwierzytelnienie klienta.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Klient otrzymał informację o saldzie lub o błędzie.
+    \item Spełniono wymaganie F04: Klient sprawdza saldo konta, również w przeliczeniu na wybraną walutę.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Klient wybiera opcję sprawdzenia salda.
+    \item Bankomat pobiera saldo z systemu bankowego.
+    \item Jeśli udało się pobrać dane:
+    \begin{scenariusz}
+        \item Bankomat wyświetla saldo konta.
+        \item Klient może wybrać inną walutę, aby zobaczyć przeliczoną wartość salda.
+    \end{scenariusz}
+    \item W przeciwnym razie:
+    \begin{scenariusz}
+        \item Bankomat informuje o niemożności pobrania salda.
+    \end{scenariusz}
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU04. Drukowanie potwierdzenia}
+
+\noindent\textbf{Cel:} Wydrukowanie potwierdzenia wykonanej operacji.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez PU02. Wypłata gotówki:
+    \begin{itemize}
+        \item Klient zakończył wypłatę i wybrał wydruk potwierdzenia.
+    \end{itemize}
+    \item Inicjacja przez PU09. Wpłata gotówki:
+    \begin{itemize}
+        \item Klient zakończył wpłatę i wybrał wydruk potwierdzenia.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Potwierdzenie zostało wydrukowane lub zgłoszono błąd drukarki.
+    \item Spełniono wymaganie F05: Na życzenie klienta bankomat drukuje potwierdzenie wykonanej operacji.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Bankomat przygotowuje potwierdzenie wykonanej operacji.
+    \item Jeśli drukarka jest sprawna:
+    \begin{scenariusz}
+        \item Bankomat drukuje datę, rodzaj operacji i jej wynik oraz kwotę, jeśli dotyczy.
+        \item Klient odbiera potwierdzenie.
+    \end{scenariusz}
+    \item W przeciwnym razie:
+    \begin{scenariusz}
+        \item Bankomat informuje o niemożności wydruku.
+    \end{scenariusz}
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU05. Anulowanie operacji}
+
+\noindent\textbf{Cel:} Przerwanie operacji przed jej zatwierdzeniem.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez PU02. Wypłata gotówki lub PU09. Wpłata gotówki:
+    \begin{itemize}
+        \item Klient wybrał anulowanie przed zatwierdzeniem operacji.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Operacja została anulowana.
+    \item Spełniono wymaganie F06: Klient otrzymuje możliwość anulowania operacji przed jej zatwierdzeniem.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Bankomat przerywa wykonywaną operację.
+    \item Jeśli anulowano PU09. Wpłata gotówki:
+    \begin{scenariusz}
+        \item Bankomat zwraca włożone banknoty.
+    \end{scenariusz}
+    \item Bankomat informuje o anulowaniu operacji.
+    \item Bankomat wraca do menu.
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU06. Zakończenie sesji}
+
+\noindent\textbf{Cel:} Zakończenie korzystania z bankomatu.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Klienta:
+    \begin{itemize}
+        \item Klient korzysta z bankomatu i nie wykonuje aktualnie transakcji.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Sesja została zakończona, a bankomat powrócił do ekranu początkowego.
+    \item Spełniono wymaganie F07: Klient kończy sesję i odbiera kartę.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Klient wybiera zakończenie sesji.
+    \item Bankomat zwraca kartę.
+    \item Klient odbiera kartę.
+    \item System usuwa dane klienta z ekranu i wyświetla ekran początkowy.
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU07. Sprawdzenie stanu bankomatu}
+
+\noindent\textbf{Cel:} Sprawdzenie działania urządzenia i ilości gotówki.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Pracownika obsługi bankomatu:
+    \begin{itemize}
+        \item Pracownik ma dostęp do trybu obsługi urządzenia.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Pracownik otrzymał informacje o stanie bankomatu.
+    \item Spełniono wymaganie F08: Pracownik sprawdza stan bankomatu i ilość gotówki.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Pracownik wybiera opcję sprawdzenia stanu bankomatu.
+    \item System wyświetla stan urządzenia oraz ilość gotówki przeznaczonej do wypłat i przyjętej podczas wpłat.
+    \item Jeśli występuje usterka:
+    \begin{scenariusz}
+        \item Bankomat wyświetla informację o problemie.
+    \end{scenariusz}
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU08. Uzupełnianie i odbiór gotówki}
+
+\noindent\textbf{Cel:} Dołożenie gotówki do wypłat lub odebranie pieniędzy z wpłat.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Pracownika obsługi bankomatu:
+    \begin{itemize}
+        \item Pracownik ma dostęp do trybu obsługi urządzenia.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Stan gotówki w bankomacie został zaktualizowany.
+    \item Spełniono wymaganie F09: Pracownik uzupełnia gotówkę do wypłat lub odbiera banknoty z wpłat.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Pracownik wybiera uzupełnienie lub odbiór gotówki.
+    \item Pracownik dokłada albo wyjmuje banknoty.
+    \item Pracownik wprowadza liczbę banknotów i zatwierdza zmianę.
+    \item System zapisuje nowy stan gotówki.
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU09. Wpłata gotówki}
+
+\noindent\textbf{Cel:} Wpłacenie pieniędzy na konto klienta.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez Klienta:
+    \begin{itemize}
+        \item Klient został uwierzytelniony przez PU01. Uwierzytelnienie klienta.
+    \end{itemize}
+    \item Moduł wpłat jest dostępny.
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Gotówka została wpłacona lub klient otrzymał informację o błędzie.
+    \item Spełniono wymaganie F10: Klient wpłaca gotówkę na konto.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Klient wybiera wpłatę gotówki.
+    \item Klient wkłada banknoty do modułu wpłat.
+    \item Bankomat sprawdza banknoty i wyświetla ich łączną wartość.
+    \item Jeśli klient wybierze anulowanie:
+    \begin{scenariusz}
+        \item Inicjacja PU05. Anulowanie operacji.
+    \end{scenariusz}
+    \item W przeciwnym razie:
+    \begin{scenariusz}
+        \item Klient zatwierdza kwotę wpłaty.
+        \item Bankomat wysyła prośbę o zatwierdzenie wpłaty do systemu bankowego.
+        \item Jeśli bank zatwierdzi wpłatę:
+        \begin{scenariusz}
+            \item Bankomat przyjmuje gotówkę i zapisuje transakcję.
+            \item Jeśli klient wybierze wydruk, następuje inicjacja PU04. Drukowanie potwierdzenia.
+        \end{scenariusz}
+        \item W przeciwnym razie:
+        \begin{scenariusz}
+            \item Bankomat informuje o błędzie i zwraca banknoty.
+        \end{scenariusz}
+    \end{scenariusz}
+\end{scenariusz}
+
+
+\Needspace{9\baselineskip}
+\subsubsection*{PU10. Przewalutowanie podczas wypłaty}
+
+\noindent\textbf{Cel:} Umożliwienie rozliczenia wypłaty w walucie karty.
+
+\noindent\textbf{Warunki wstępne:}
+\begin{itemize}
+    \item Inicjacja przez PU02. Wypłata gotówki:
+    \begin{itemize}
+        \item PU02 przekazuje kwotę wypłaty.
+        \item Waluta rozliczeniowa karty jest inna niż PLN.
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Warunki końcowe:}
+\begin{itemize}
+    \item Zapisano wybór sposobu rozliczenia wypłaty.
+    \item Spełniono wymaganie F11: Podczas wypłaty klient może dokonać przewalutowania transakcji.
+\end{itemize}
+
+\noindent\textbf{Scenariusz:}
+\begin{scenariusz}
+    \item Bankomat wyświetla proponowany kurs i kwotę w walucie karty.
+    \item Klient wybiera rozliczenie w walucie karty albo w złotówkach.
+    \item System zapisuje wybór klienta.
+    \item Następuje powrót do PU02. Wypłata gotówki.
+\end{scenariusz}
 
 \end{document}
